@@ -1,32 +1,43 @@
+import { useState, useEffect } from 'react'
 import './App.css'
 import About from './components/About.jsx'
+import saielLogo from './assets/Saiel-Logo.png'
+
+const themes = [
+  { name: 'dark-theme', icon: '☀️' },    // Show sun when in dark mode
+  { name: 'light-theme', icon: '🌙' },   // Show moon when in light mode
+  { name: 'white-theme', icon: '⚫' },   // Show black circle when in white mode
+  { name: 'black-theme', icon: '⚪' }    // Show white circle when in black mode
+]
 
 function App() {
   const companyName="Saiel"
   const currentYear = new Date().getFullYear()
+  const [currentTheme, setCurrentTheme] = useState(0) // 0: dark, 1: light, 2: white, 3: black
+
+  // Apply theme to body element
+  useEffect(() => {
+    document.body.className = themes[currentTheme].name
+  }, [currentTheme])
+
+  const toggleTheme = () => {
+    setCurrentTheme((prev) => (prev + 1) % themes.length)
+  }
 
   return (
     <>
-      <video 
-        className="video-background"
-        autoPlay
-        muted
-        loop
-        playsInline
-      >
-        <source src="./assets/7670835-uhd_3840_2160_30fps.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-      
       <header className="fixed-header">
         <div className="header-left">
-          <div className="logo">💰</div>
+          <img src={saielLogo} alt="Saiel Logo" className="logo" />
           <h1 className="company-name">{companyName}</h1>
         </div>
         <nav className="header-nav">
           <a href="#home">Home</a>
           <a href="#about">About Us</a>
           <a href="#contact">Contact</a>
+          <button className="theme-toggle" onClick={toggleTheme}>
+            {themes[currentTheme].icon}
+          </button>
         </nav>
       </header>
       
@@ -41,7 +52,7 @@ function App() {
       
       <footer className="app-footer">
         <div className="footer-copyright">
-          © {companyName}, {currentYear}
+          © <span className="company-name-footer">{companyName}</span>, {currentYear}
         </div>
         <div className="footer-rights">
           All rights reserved.
